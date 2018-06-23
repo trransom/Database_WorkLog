@@ -19,6 +19,48 @@ def screen_prompt(display, input, regex):
 	task.display()
 	return task.input()
 	
+def search_screen():
+	'''
+		Displays the menu for choosing which searching
+		method you want to use, Exact Date, Range of Dates,
+		Exact Search, Regex Pattern, or to return to the
+		menu.
+	'''
+	clear_screen()
+	options = screen_prompt('Do you want to search by:\na)Employee ID\n' +
+							'b)Range of Dates\nc)Amount of Time\nd)Search Term\n' +
+							'e)Return to Menu', '>', '[AaBbCcDdEe]')
+	#Prompt for date search.
+	if options.lower()=='a':
+		clear_screen()
+		inpt = screen_prompt("Enter the employee ID:", '>', '\d*')
+		
+		#TODO: Search through database and return list of tasks with employee ID
+		
+	#prompt for range of dates
+	elif options.lower()=='b':
+		clear_screen()
+		inpt = screen_prompt('Enter the range of dates.\nPlease use MM/DD/YYYY, MM/DD/YYYY format',
+							'>', '([0-1][0-9])\/([0-3][0-9])\/[0-9]{4}, ([0-1][0-9])\/([0-3][0-9])\/[0-9]{4}')
+		
+		#TODO: Search database for tasks with dates between range of dates.
+			
+	#prompt for exact search
+	elif options.lower()=='c':
+		clear_screen()
+		inpt = screen_prompt('Enter the amount of time:\n', '>', '\d*')
+		#TODO: Search database for tasks that match time input
+			
+	elif options.lower()=='d':
+		clear_screen()
+		inpt = screen_prompt('Enter your search term:\n', '>', '.*')
+		
+		#TODO: Search database for tasks where either the task name or notes
+		#match the input
+		
+	elif options.lower()=='e':
+		main()
+	
 def main():
 	'''
 		Displays the main menu and prompts
@@ -54,7 +96,11 @@ def main():
 			#Prompt for notes
 			notes = screen_prompt('Notes (optional, allowed to leave blank): ', '>', '.*[\w\s].*')
 			
-			#TODO: Enter task to task database
+			#TODO: Enter task to task database.
+			#If ID input is not in employee database, handle as error
+			
+	elif inpt.lower()=='b':
+		search_screen()
 
 if __name__ == '__main__':
 	main()
