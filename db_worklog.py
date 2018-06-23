@@ -101,6 +101,14 @@ def main():
 			
 	elif inpt.lower()=='b':
 		search_screen()
+		
+	elif inpt.lower()=='c':
+		#TODO: Add code to enter a new employee
+	
+	elif inpt.lower()=='d':
+		clear_screen()
+		print('Thanks for using the Work Log program!')
+		sys.exit()
 
 if __name__ == '__main__':
 	main()
