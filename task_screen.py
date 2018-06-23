@@ -1,5 +1,4 @@
 '''Task Screen'''
-#Task Screen
 import os
 import re
 
