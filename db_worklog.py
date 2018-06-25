@@ -196,9 +196,9 @@ def main():
 			except OperationalError:
 				pass
 			db.create_tables([Task], safe=True)
-			db.close()
+			#Add error handling
 			Task.create(emp_id=id, date=date, title=name, time=time, notes=notes)#Null pointer exception?
-			
+			db.close()
 			clear_screen()
 			i = input('Task successfully logged. Press any key to return.\n')
 			main()
