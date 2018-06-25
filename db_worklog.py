@@ -40,6 +40,30 @@ def screen_prompt(display, input, regex):
 	task.display()
 	return task.input()
 	
+def task_display(num1, total, list):
+	'''
+		Displays a single task and allows the user
+		to cycle through a list of tasks.
+	'''
+	clear_screen()
+	number = num1
+	print('Employee ID: ' + str(list[number].emp_id) + '\n' +
+			'Date: ' + str(list[number].date) + '\n' +
+			'Title: ' + str(list[number].title) + '\n' +
+			'Time Spent: ' + str(list[number].time) + '\n' +
+			'Notes: ' + str(list[number].notes) + '\n\n' +
+			'Result ' + str(number+1) + ' of ' + str(total) + '\n\n')
+			
+	ans = input('[N]ext, [B]ack, [R]eturn to search menu\n')
+	if ans.lower()=='n' and number != total-1:
+		task_display(number+1, total, list)
+	elif ans.lower()=='b' and number !=0:
+		task_display(number-1, total, list)
+	elif ans.lower()=='r':
+		search_screen()
+	else:
+		task_display(number, total, list)
+	
 def search_screen():
 	'''
 		Displays the menu for choosing which searching
@@ -58,7 +82,8 @@ def search_screen():
 		
 		#TODO: Search through database and return list of tasks with employee ID
 		db.connect()
-		t = Task.select(Task.emp_id==inpt)
+		task_list = Task.select().where(Task.emp_id==inpt)
+		task_display(0, len(task_list), task_list)
 		
 	#prompt for range of dates
 	elif options.lower()=='b':
