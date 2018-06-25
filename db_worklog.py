@@ -3,9 +3,29 @@ import csv
 import os
 import re
 import sys
+from peewee import *
 
 from task_screen import Task_Screen
-from employee_db import Employee, Task
+#from employee_db import Database
+from task import Task
+
+db = SqliteDatabase('employees.db')
+
+#class Employee(Model):
+#	emp_id = IntegerField(unique=True)
+#	first_name = CharField(max_length=255)
+#	last_name = CharField(max_length=255)
+#	class Meta:
+#		database = db
+#	
+class Task(Model):
+	emp_id = IntegerField(unique=True)
+	date = DateTimeField()
+	title = CharField(max_length=255)
+	time = IntegerField()
+	notes = TextField()
+	class Meta:
+		database = db
 
 
 def clear_screen():
@@ -59,6 +79,7 @@ def search_screen():
 		#TODO: Search database for tasks where either the task name or notes
 		#match the input
 		
+		
 	elif options.lower()=='e':
 		main()
 	
@@ -99,6 +120,10 @@ def main():
 			
 			#TODO: Enter task to task database.
 			#If ID input is not in employee database, handle as error
+			db.connect()
+			db.create_tables([Task], safe=True)
+			Task.create(emp_id=id, date=date, title=name, time=time, notes=notes)#Null pointer exception?
+			
 			
 	elif inpt.lower()=='b':
 		search_screen()
