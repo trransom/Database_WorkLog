@@ -4,6 +4,7 @@ import os
 import re
 import sys
 from peewee import *
+from datetime import datetime as dt
 
 from task_screen import Task_Screen
 #from employee_db import Database
@@ -80,9 +81,11 @@ def search_screen():
 		clear_screen()
 		inpt = screen_prompt("Enter the employee ID:", '>', '\d*')
 		
-		#TODO: Search through database and return list of tasks with employee ID
+		#Search through database and return list of tasks with employee ID
+		#TODO: update database so that it returns more than one
 		db.connect()
 		task_list = Task.select().where(Task.emp_id==inpt)
+		db.close()
 		task_display(0, len(task_list), task_list)
 		
 	#prompt for range of dates
@@ -92,12 +95,21 @@ def search_screen():
 							'>', '([0-1][0-9])\/([0-3][0-9])\/[0-9]{4}, ([0-1][0-9])\/([0-3][0-9])\/[0-9]{4}')
 		
 		#TODO: Search database for tasks with dates between range of dates.
-			
+		inpt = inpt.split(', ')
+		time1 = dt.strptime(inpt[0], '%m/%d/%Y')
+		time2 = dt.strptime(inpt[1], '%m/%d/%Y')
+		
+		db.connect()
+		task_list = Task.select().where(Task.date >= time1 and Task.date <= time2)
+		db.close()
+		task_display(0, len(task_list), task_list)
+		
 	#prompt for exact search
 	elif options.lower()=='c':
 		clear_screen()
 		inpt = screen_prompt('Enter the amount of time:\n', '>', '\d*')
 		#TODO: Search database for tasks that match time input
+		
 			
 	elif options.lower()=='d':
 		clear_screen()
