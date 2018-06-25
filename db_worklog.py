@@ -189,14 +189,13 @@ def main():
 			#Prompt for notes
 			notes = screen_prompt('Notes: ', '>', '.*[\w\s].*')
 			
-			#TODO: Enter task to task database.
-			#If ID input is not in employee database, handle as error
+			#Enter task to task database.
+			#TODO:If ID input is not in employee database, handle as error
 			try:
 				db.connect()
 			except OperationalError:
 				pass
 			db.create_tables([Task], safe=True)
-			
 			Task.create(emp_id=id, date=date, title=name, time=time, notes=notes)#Null pointer exception?
 			db.close()
 			clear_screen()
