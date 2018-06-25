@@ -57,6 +57,8 @@ def search_screen():
 		inpt = screen_prompt("Enter the employee ID:", '>', '\d*')
 		
 		#TODO: Search through database and return list of tasks with employee ID
+		db.connect()
+		t = Task.select(Task.emp_id==inpt)
 		
 	#prompt for range of dates
 	elif options.lower()=='b':
@@ -123,7 +125,11 @@ def main():
 			db.connect()
 			db.create_tables([Task], safe=True)
 			Task.create(emp_id=id, date=date, title=name, time=time, notes=notes)#Null pointer exception?
+			db.close()
 			
+			clear_screen()
+			i = input('Task successfully logged. Press any key to return.\n')
+			main()
 			
 	elif inpt.lower()=='b':
 		search_screen()
