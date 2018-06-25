@@ -78,7 +78,7 @@ def main():
 	if inpt.lower()=='a':
 			clear_screen()
 			#Retrieve the employee id
-			id = screen_prompt('Employee ID: ', '', '\d*')
+			id = screen_prompt('Employee ID: ', '', '\d+')
 			
 			clear_screen()
 			#display the date task screen and retrieve the date.
@@ -101,10 +101,22 @@ def main():
 			
 	elif inpt.lower()=='b':
 		search_screen()
-		
+			
 	elif inpt.lower()=='c':
-		#TODO: Add code to enter a new employee
-	
+		clear_screen()
+		#Create employee id
+		id = screen_prompt('Enter the new employee ID: ', '>', '\d+')
+		
+		clear_screen()
+		#Create employee first name
+		first = screen_prompt('Enter the employee\'s first name', '>', '\w+')
+		
+		clear_screen()
+		#Create employee last name
+		last = screen_prompt('Enter the employee\'s last name', '>', '\w+')
+		
+		#TODO: Enter the new employee into the employee database
+		
 	elif inpt.lower()=='d':
 		clear_screen()
 		print('Thanks for using the Work Log program!')
