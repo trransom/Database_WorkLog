@@ -100,7 +100,7 @@ def search_screen():
 		inpt = screen_prompt('Enter the range of dates.\nPlease use MM/DD/YYYY, MM/DD/YYYY format',
 							'>', '([0-1][0-9])\/([0-3][0-9])\/[0-9]{4}, ([0-1][0-9])\/([0-3][0-9])\/[0-9]{4}')
 		
-		#TODO: Search database for tasks with dates between range of dates.
+		#Search database for tasks with dates between range of dates.
 		inpt = inpt.split(', ')
 		time1 = dt.strptime(inpt[0], '%m/%d/%Y')
 		time2 = dt.strptime(inpt[1], '%m/%d/%Y')
@@ -119,7 +119,7 @@ def search_screen():
 	elif options.lower()=='c':
 		clear_screen()
 		inpt = screen_prompt('Enter the amount of time:\n', '>', '\d*')
-		#TODO: Search database for tasks that match time input
+		#Search database for tasks that match time input
 		try:
 			db.connect()
 		except OperationalError:
@@ -136,7 +136,7 @@ def search_screen():
 		clear_screen()
 		inpt = screen_prompt('Enter your search term:\n', '>', '.*')
 		
-		#TODO: Search database for tasks where either the task name or notes
+		#Search database for tasks where either the task name or notes
 		#match the input
 		try:
 			db.connect()
@@ -187,7 +187,7 @@ def main():
 			
 			clear_screen()
 			#Prompt for notes
-			notes = screen_prompt('Notes (optional, allowed to leave blank): ', '>', '.*[\w\s].*')
+			notes = screen_prompt('Notes: ', '>', '.*[\w\s].*')
 			
 			#TODO: Enter task to task database.
 			#If ID input is not in employee database, handle as error
@@ -196,7 +196,7 @@ def main():
 			except OperationalError:
 				pass
 			db.create_tables([Task], safe=True)
-			#Add error handling
+			
 			Task.create(emp_id=id, date=date, title=name, time=time, notes=notes)#Null pointer exception?
 			db.close()
 			clear_screen()
