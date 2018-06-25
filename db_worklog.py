@@ -5,6 +5,7 @@ import re
 import sys
 
 from task_screen import Task_Screen
+from employee_db import Employee, Task
 
 
 def clear_screen():
