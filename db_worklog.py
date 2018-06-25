@@ -83,11 +83,17 @@ def search_screen():
 		
 		#Search through database and return list of tasks with employee ID
 		#TODO: update database so that it returns more than one
-		db.connect()
+		try:
+			db.connect()
+		except peewee.OperationalError:
+			pass
 		task_list = Task.select().where(Task.emp_id==inpt)
 		db.close()
-		task_display(0, len(task_list), task_list)
-		
+		try:
+			task_display(0, len(task_list), task_list)
+		except IndexError:
+			i = input('No results found. Press any key to return to the search menu.')
+			search_screen()
 	#prompt for range of dates
 	elif options.lower()=='b':
 		clear_screen()
@@ -98,18 +104,33 @@ def search_screen():
 		inpt = inpt.split(', ')
 		time1 = dt.strptime(inpt[0], '%m/%d/%Y')
 		time2 = dt.strptime(inpt[1], '%m/%d/%Y')
-		
-		db.connect()
+		try:
+			db.connect()
+		except OperationalError:
+			pass
 		task_list = Task.select().where(Task.date >= time1 and Task.date <= time2)
 		db.close()
-		task_display(0, len(task_list), task_list)
-		
-	#prompt for exact search
+		try:
+			task_display(0, len(task_list), task_list)
+		except IndexError:
+			i = input('No results found. Press any key to return to the search menu.')
+			search_screen()
+	#prompt for time search
 	elif options.lower()=='c':
 		clear_screen()
 		inpt = screen_prompt('Enter the amount of time:\n', '>', '\d*')
 		#TODO: Search database for tasks that match time input
-		
+		try:
+			db.connect()
+		except OperationalError:
+			pass
+		task_list = Task.select().where(Task.time==inpt)
+		db.close()
+		try:
+			task_display(0, len(task_list), task_list)
+		except IndexError:
+			i = input('No results found. Press any key to return to the search menu.')
+			search_screen()
 			
 	elif options.lower()=='d':
 		clear_screen()
@@ -117,6 +138,17 @@ def search_screen():
 		
 		#TODO: Search database for tasks where either the task name or notes
 		#match the input
+		try:
+			db.connect()
+		except OperationalError:
+			pass
+		task_list = Task.select().where((Task.title or Task.notes)==inpt)
+		db.close()
+		try:
+			task_display(0, len(task_list), task_list)
+		except IndexError:
+			i = input('No results found. Press any key to return to the search menu.')
+			search_screen()
 		
 		
 	elif options.lower()=='e':
@@ -159,10 +191,13 @@ def main():
 			
 			#TODO: Enter task to task database.
 			#If ID input is not in employee database, handle as error
-			db.connect()
+			try:
+				db.connect()
+			except OperationalError:
+				pass
 			db.create_tables([Task], safe=True)
-			Task.create(emp_id=id, date=date, title=name, time=time, notes=notes)#Null pointer exception?
 			db.close()
+			Task.create(emp_id=id, date=date, title=name, time=time, notes=notes)#Null pointer exception?
 			
 			clear_screen()
 			i = input('Task successfully logged. Press any key to return.\n')
