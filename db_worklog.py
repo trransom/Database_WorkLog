@@ -7,7 +7,6 @@ from peewee import *
 from datetime import datetime as dt
 
 from task_screen import Task_Screen
-#from employee_db import Database
 from task import Task
 
 db = SqliteDatabase('employees.db')
@@ -80,12 +79,11 @@ def search_screen():
 	#Prompt for date search.
 	if options.lower()=='a':
 		clear_screen()
+		visited = []
 		for id in Task.select():
-			print(id.emp_id)
-		
-#		print('Which employee would you like to view entries for?\n')
-#		for i in id_list:
-#			print(i)
+			if id.emp_id not in visited:
+				visited.append(id.emp_id)
+				print(id.emp_id)
 		inpt = screen_prompt("Enter the employee ID you would like to view:", '>', '\d*')
 		
 		#Search through database and return list of tasks with employee ID
@@ -96,7 +94,6 @@ def search_screen():
 			pass
 		task_list = Task.select().where(Task.emp_id==inpt)
 		db.close()
-		print(task_list)
 		try:
 			task_display(0, len(task_list), task_list)
 		except IndexError:
