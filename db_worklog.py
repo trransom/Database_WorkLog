@@ -48,10 +48,7 @@ def task_display(num1, total, list):
 		to cycle through a list of tasks.
 	'''
 	clear_screen()
-	print('FLAG1')
 	number = num1
-	print('FLAG2')
-	print(list)
 	print('Task ID: ' + str(list[number].task_id) + '\n' +
 			'Employee ID: ' + str(list[number].emp_id) + '\n' +
 			'Date: ' + str(list[number].date) + '\n' +
@@ -59,7 +56,6 @@ def task_display(num1, total, list):
 			'Time: ' + str(list[number].time) + '\n' +
 			'Notes: ' + str(list[number].notes) + '\n\n' +
 			'Result ' + str(number+1) + ' of ' + str(total) + '\n\n')
-	print('FLAG3')		
 	ans = input('[N]ext, [B]ack, [R]eturn to search menu\n')
 	if ans.lower()=='n' and number != total-1:
 		task_display(number+1, total, list)
@@ -84,7 +80,13 @@ def search_screen():
 	#Prompt for date search.
 	if options.lower()=='a':
 		clear_screen()
-		inpt = screen_prompt("Enter the employee ID:", '>', '\d*')
+		for id in Task.select():
+			print(id.emp_id)
+		
+#		print('Which employee would you like to view entries for?\n')
+#		for i in id_list:
+#			print(i)
+		inpt = screen_prompt("Enter the employee ID you would like to view:", '>', '\d*')
 		
 		#Search through database and return list of tasks with employee ID
 		#TODO: update database so that it returns more than one
@@ -92,7 +94,7 @@ def search_screen():
 			db.connect()
 		except OperationalError:
 			pass
-		task_list = Task.select().where(Task.task_id==inpt)
+		task_list = Task.select().where(Task.emp_id==inpt)
 		db.close()
 		print(task_list)
 		try:
