@@ -20,7 +20,8 @@ db = SqliteDatabase('employees.db')
 #		database = db
 #	
 class Task(Model):
-	emp_id = IntegerField(unique=True)
+	task_id = IntegerField(unique=True)
+	emp_id = IntegerField()
 	date = DateTimeField()
 	title = CharField(max_length=255)
 	time = IntegerField()
@@ -169,7 +170,12 @@ def main():
 				)
 				
 	if inpt.lower()=='a':
+	
 			clear_screen()
+			#Retrieve task ID
+			t_id = screen_prompt('Task ID: ', '', '\d+')
+			clear_screen()
+			
 			#Retrieve the employee id
 			id = screen_prompt('Employee ID: ', '', '\d+')
 			
@@ -196,7 +202,7 @@ def main():
 			except OperationalError:
 				pass
 			db.create_tables([Task], safe=True)
-			Task.create(emp_id=id, date=date, title=name, time=time, notes=notes)#Null pointer exception?
+			Task.create(task_id=t_id, emp_id=id, date=date, title=name, time=time, notes=notes)
 			db.close()
 			clear_screen()
 			i = input('Task successfully logged. Press any key to return.\n')
