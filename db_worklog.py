@@ -18,7 +18,7 @@ db = SqliteDatabase('employees.db')
 #	last_name = CharField(max_length=255)
 #	class Meta:
 #		database = db
-#	
+	
 class Task(Model):
 	task_id = IntegerField(unique=True)
 	emp_id = IntegerField()
@@ -48,14 +48,18 @@ def task_display(num1, total, list):
 		to cycle through a list of tasks.
 	'''
 	clear_screen()
+	print('FLAG1')
 	number = num1
-	print('Employee ID: ' + str(list[number].emp_id) + '\n' +
+	print('FLAG2')
+	print(list)
+	print('Task ID: ' + str(list[number].task_id) + '\n' +
+			'Employee ID: ' + str(list[number].emp_id) + '\n' +
 			'Date: ' + str(list[number].date) + '\n' +
 			'Title: ' + str(list[number].title) + '\n' +
-			'Time Spent: ' + str(list[number].time) + '\n' +
+			'Time: ' + str(list[number].time) + '\n' +
 			'Notes: ' + str(list[number].notes) + '\n\n' +
 			'Result ' + str(number+1) + ' of ' + str(total) + '\n\n')
-			
+	print('FLAG3')		
 	ans = input('[N]ext, [B]ack, [R]eturn to search menu\n')
 	if ans.lower()=='n' and number != total-1:
 		task_display(number+1, total, list)
@@ -86,10 +90,11 @@ def search_screen():
 		#TODO: update database so that it returns more than one
 		try:
 			db.connect()
-		except peewee.OperationalError:
+		except OperationalError:
 			pass
-		task_list = Task.select().where(Task.emp_id==inpt)
+		task_list = Task.select().where(Task.task_id==inpt)
 		db.close()
+		print(task_list)
 		try:
 			task_display(0, len(task_list), task_list)
 		except IndexError:
@@ -161,6 +166,13 @@ def main():
 		user for a choice to either add a task, 
 		search for a task, or to exit the program.
 	'''
+	try:
+		db.connect()
+	except OperationalError:
+		pass
+	db.create_tables([Task], safe=True)
+	db.close()
+	
 	clear_screen()
 	inpt = screen_prompt(
 				'WORK LOG\nWhat would you like to do?\na) Add a new entry\nb) Search in existing entries\n' +
@@ -170,43 +182,42 @@ def main():
 				)
 				
 	if inpt.lower()=='a':
-	
-			clear_screen()
-			#Retrieve task ID
-			t_id = screen_prompt('Task ID: ', '', '\d+')
-			clear_screen()
-			
-			#Retrieve the employee id
-			id = screen_prompt('Employee ID: ', '', '\d+')
-			
-			clear_screen()
-			#display the date task screen and retrieve the date.
-			date = screen_prompt('Date of the task\nPlease use MM/DD/YYYY: ', '', '([0-1][0-9])\/([0-3][0-9])\/[0-9]{4}')
-			
-			clear_screen()
-			#Retrieve the title of the task
-			name = screen_prompt('Name of the task: ', '>', '.*[\w\s].*')
-			
-			clear_screen()
-			#Retrieve the time spent completing the task
-			time = screen_prompt('Time Spent (rounded by minute): ', '>', '\d+')
-			
-			clear_screen()
-			#Prompt for notes
-			notes = screen_prompt('Notes: ', '>', '.*[\w\s].*')
-			
-			#Enter task to task database.
-			#TODO:If ID input is not in employee database, handle as error
-			try:
-				db.connect()
-			except OperationalError:
-				pass
-			db.create_tables([Task], safe=True)
-			Task.create(task_id=t_id, emp_id=id, date=date, title=name, time=time, notes=notes)
-			db.close()
-			clear_screen()
-			i = input('Task successfully logged. Press any key to return.\n')
-			main()
+		clear_screen()
+		#Retrieve task ID
+		t_id = screen_prompt('Task ID: ', '', '\d+')
+		clear_screen()
+		
+		#Retrieve the employee id
+		id = screen_prompt('Employee ID: ', '', '\d+')
+		
+		clear_screen()
+		#display the date task screen and retrieve the date.
+		date = screen_prompt('Date of the task\nPlease use MM/DD/YYYY: ', '', '([0-1][0-9])\/([0-3][0-9])\/[0-9]{4}')
+		
+		clear_screen()
+		#Retrieve the title of the task
+		name = screen_prompt('Name of the task: ', '>', '.*[\w\s].*')
+		
+		clear_screen()
+		#Retrieve the time spent completing the task
+		time = screen_prompt('Time Spent (rounded by minute): ', '>', '\d+')
+		
+		clear_screen()
+		#Prompt for notes
+		notes = screen_prompt('Notes: ', '>', '.*[\w\s].*')
+		
+		#Enter task to task database.
+		#TODO:If ID input is not in employee database, handle as error
+		try:
+			db.connect()
+		except OperationalError:
+			pass
+		db.create_tables([Task], safe=True)
+		Task.create(task_id=t_id, emp_id=id, date=date, title=name, time=time, notes=notes)
+		db.close()
+		clear_screen()
+		i = input('Task successfully logged. Press any key to return.\n')
+		main()
 			
 	elif inpt.lower()=='b':
 		search_screen()
@@ -225,7 +236,15 @@ def main():
 		last = screen_prompt('Enter the employee\'s last name', '>', '\w+')
 		
 		#TODO: Enter the new employee into the employee database
-		
+		try:
+			db.connect()
+		except OperationalError:
+			pass
+		Employee.create(emp_id=id, first_name=first, last_name=last)
+		db.close()
+		clear_screen()
+		i = input('New employee successfully logged. Press any key to return.\n')
+		main()
 	elif inpt.lower()=='d':
 		clear_screen()
 		print('Thanks for using the Work Log program!')
