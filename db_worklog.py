@@ -19,6 +19,10 @@ db = SqliteDatabase('employees.db')
 #		database = db
 	
 class Task(Model):
+	'''
+		Initializes the 'Task' relation in the 
+		'employees.db' database.
+	'''
 	task_id = IntegerField(unique=True)
 	emp_id = IntegerField()
 	date = DateTimeField()
@@ -30,6 +34,9 @@ class Task(Model):
 
 
 def clear_screen():
+	'''
+		Clears the console.
+	'''
 	os.system('cls' if os.name == 'nt' else 'clear')
 	return os.system('cls' if os.name == 'nt' else 'clear')
 	
@@ -49,6 +56,7 @@ def task_display(num1, total, list):
 	'''
 	clear_screen()
 	number = num1
+	# Display the task ID, the employee ID, the date, title, time, and notes of the task.
 	print('Task ID: ' + str(list[number].task_id) + '\n' +
 			'Employee ID: ' + str(list[number].emp_id) + '\n' +
 			'Date: ' + str(list[number].date) + '\n' +
@@ -57,6 +65,9 @@ def task_display(num1, total, list):
 			'Notes: ' + str(list[number].notes) + '\n\n' +
 			'Result ' + str(number+1) + ' of ' + str(total) + '\n\n')
 	ans = input('[N]ext, [B]ack, [R]eturn to search menu\n')
+	
+	# Controls IndexErrors by not allowing the user to cycle past the 
+	# first or last member of the task list.
 	if ans.lower()=='n' and number != total-1:
 		task_display(number+1, total, list)
 	elif ans.lower()=='b' and number !=0:
@@ -64,6 +75,7 @@ def task_display(num1, total, list):
 	elif ans.lower()=='r':
 		search_screen()
 	else:
+		# Recursively calls task_display until the user breaks out of the menu.
 		task_display(number, total, list)
 	
 def search_screen():
@@ -77,7 +89,7 @@ def search_screen():
 	options = screen_prompt('Do you want to search by:\na)Employee ID\n' +
 							'b)Range of Dates\nc)Amount of Time\nd)Search Term\n' +
 							'e)Return to Menu', '>', '[AaBbCcDdEe]')
-	#Prompt for date search.
+	# Prompt for date search.
 	if options.lower()=='a':
 		clear_screen()
 		visited = []
@@ -87,8 +99,7 @@ def search_screen():
 				print(id.emp_id)
 		inpt = screen_prompt("Enter the employee ID you would like to view:", '>', '\d*')
 		
-		#Search through database and return list of tasks with employee ID
-		#TODO: update database so that it returns more than one
+		# Search through database and return list of tasks with employee ID
 		try:
 			db.connect()
 		except OperationalError:
@@ -100,13 +111,13 @@ def search_screen():
 		except IndexError:
 			i = input('No results found. Press any key to return to the search menu.')
 			search_screen()
-	#prompt for range of dates
+	# Prompt for range of dates
 	elif options.lower()=='b':
 		clear_screen()
 		inpt = screen_prompt('Enter the range of dates.\nPlease use MM/DD/YYYY, MM/DD/YYYY format',
 							'>', '([0-1][0-9])\/([0-3][0-9])\/[0-9]{4}, ([0-1][0-9])\/([0-3][0-9])\/[0-9]{4}')
 		
-		#Search database for tasks with dates between range of dates.
+		# Search database for tasks with dates between range of dates.
 		inpt = inpt.split(', ')
 		time1 = dt.strptime(inpt[0], '%m/%d/%Y')
 		time2 = dt.strptime(inpt[1], '%m/%d/%Y')
@@ -121,11 +132,11 @@ def search_screen():
 		except IndexError:
 			i = input('No results found. Press any key to return to the search menu.')
 			search_screen()
-	#prompt for time search
+	# Prompt for time search
 	elif options.lower()=='c':
 		clear_screen()
 		inpt = screen_prompt('Enter the amount of time:\n', '>', '\d*')
-		#Search database for tasks that match time input
+		# Search database for tasks that match time input
 		try:
 			db.connect()
 		except OperationalError:
@@ -142,8 +153,8 @@ def search_screen():
 		clear_screen()
 		inpt = screen_prompt('Enter your search term:\n', '>', '.*')
 		
-		#Search database for tasks where either the task name or notes
-		#match the input
+		# Search database for tasks where either the task name or notes
+		# match the input
 		try:
 			db.connect()
 		except OperationalError:
@@ -156,7 +167,7 @@ def search_screen():
 			i = input('No results found. Press any key to return to the search menu.')
 			search_screen()
 		
-		
+	# Return to the main menu.
 	elif options.lower()=='e':
 		main()
 	
@@ -174,9 +185,10 @@ def main():
 	db.close()
 	
 	clear_screen()
+	# Display the main menu.
 	inpt = screen_prompt(
 				'WORK LOG\nWhat would you like to do?\na) Add a new entry\nb) Search in existing entries\n' +
-				'c) Enter new employee\nd) Quit program', 
+				'c) Quit program', 
 				'>', 
 				'[AaBbCcDd]'
 				)
@@ -207,7 +219,6 @@ def main():
 		notes = screen_prompt('Notes: ', '>', '.*[\w\s].*')
 		
 		#Enter task to task database.
-		#TODO:If ID input is not in employee database, handle as error
 		try:
 			db.connect()
 		except OperationalError:
@@ -222,30 +233,30 @@ def main():
 	elif inpt.lower()=='b':
 		search_screen()
 			
+#	elif inpt.lower()=='c':
+#		clear_screen()
+#		#Create employee id
+#		id = screen_prompt('Enter the new employee ID: ', '>', '\d+')
+#		
+#		clear_screen()
+#		#Create employee first name
+#		first = screen_prompt('Enter the employee\'s first name', '>', '\w+')
+#		
+#		clear_screen()
+#		#Create employee last name
+#		last = screen_prompt('Enter the employee\'s last name', '>', '\w+')
+#		
+#		# Enter the new employee into the employee database
+#		try:
+#			db.connect()
+#		except OperationalError:
+#			pass
+#		Employee.create(emp_id=id, first_name=first, last_name=last)
+#		db.close()
+#		clear_screen()
+#		i = input('New employee successfully logged. Press any key to return.\n')
+#		main()
 	elif inpt.lower()=='c':
-		clear_screen()
-		#Create employee id
-		id = screen_prompt('Enter the new employee ID: ', '>', '\d+')
-		
-		clear_screen()
-		#Create employee first name
-		first = screen_prompt('Enter the employee\'s first name', '>', '\w+')
-		
-		clear_screen()
-		#Create employee last name
-		last = screen_prompt('Enter the employee\'s last name', '>', '\w+')
-		
-		#TODO: Enter the new employee into the employee database
-		try:
-			db.connect()
-		except OperationalError:
-			pass
-		Employee.create(emp_id=id, first_name=first, last_name=last)
-		db.close()
-		clear_screen()
-		i = input('New employee successfully logged. Press any key to return.\n')
-		main()
-	elif inpt.lower()=='d':
 		clear_screen()
 		print('Thanks for using the Work Log program!')
 		sys.exit()
