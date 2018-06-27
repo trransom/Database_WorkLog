@@ -31,6 +31,7 @@ class Task(Model):
 
 def clear_screen():
 	os.system('cls' if os.name == 'nt' else 'clear')
+	return os.system('cls' if os.name == 'nt' else 'clear')
 	
 def screen_prompt(display, input, regex):
 	'''

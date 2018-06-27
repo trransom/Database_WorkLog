@@ -16,6 +16,7 @@ class Task_Screen:
 		
 	def clear_screen(self):
 		os.system('cls' if os.name == 'nt' else 'clear')
+		return os.system('cls' if os.name == 'nt' else 'clear')
 		
 	def display(self):
 		'''
