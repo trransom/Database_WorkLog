@@ -23,7 +23,7 @@ class Task_Screen:
 		'''
 		self.clear_screen()
 		print(self.display_message)
-		
+		return self.display_message
 
 	def input(self):
 		'''

@@ -15,6 +15,11 @@ class WorklogTests(unittest.TestCase):
 		assert i == test.input_prompt
 		assert r == test.answers
 		
+	def test_display(self):
+		test = Task_Screen('TEST', 'TEST', 'TEST')
+		s = 'TEST'
+		self.assertEqual(test.display(), s)
+		
 if __name__ == '__main__':
 	unittest.main()
 
