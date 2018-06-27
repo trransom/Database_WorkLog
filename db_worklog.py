@@ -7,7 +7,7 @@ from peewee import *
 from datetime import datetime as dt
 
 from task_screen import Task_Screen
-from task import Task
+
 
 db = SqliteDatabase('employees.db')
 
