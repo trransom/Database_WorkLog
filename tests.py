@@ -20,6 +20,11 @@ class WorklogTests(unittest.TestCase):
 		s = 'TEST'
 		self.assertEqual(test.display(), s)
 		
+	def test_input(self):
+		test = Task_Screen('display', 'input', '[A-Za-z]')
+		t = 'test'
+		self.assertEqual(test.input(), t)
+		
 if __name__ == '__main__':
 	unittest.main()
 
