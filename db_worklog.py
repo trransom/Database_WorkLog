@@ -11,7 +11,7 @@ from task_screen import Task_Screen
 
 db = SqliteDatabase('employees.db')
 
-#class Employee(Model):
+#class Employee(Model): 
 #	emp_id = IntegerField(unique=True)
 #	first_name = CharField(max_length=255)
 #	last_name = CharField(max_length=255)
@@ -40,12 +40,12 @@ def clear_screen():
 	os.system('cls' if os.name == 'nt' else 'clear')
 	return os.system('cls' if os.name == 'nt' else 'clear')
 	
-def screen_prompt(display, input, regex):
+def screen_prompt(display, prompt, regex):
 	'''
 		Displays a screen message and compares input
 		against a regex pattern.
 	'''
-	task = Task_Screen(display, input, regex)
+	task = Task_Screen(display, prompt, regex)
 	task.display()
 	return task.input()
 	
@@ -77,6 +77,8 @@ def task_display(num1, total, list):
 	else:
 		# Recursively calls task_display until the user breaks out of the menu.
 		task_display(number, total, list)
+		
+def 
 	
 def search_screen():
 	'''
@@ -93,10 +95,10 @@ def search_screen():
 	if options.lower()=='a':
 		clear_screen()
 		visited = []
-		for id in Task.select():
-			if id.emp_id not in visited:
-				visited.append(id.emp_id)
-				print(id.emp_id)
+		for i in Task.select():
+			if i.emp_id not in visited:
+				visited.append(i.emp_id)
+				print(i.emp_id)
 		inpt = screen_prompt("Enter the employee ID you would like to view:", '>', '\d*')
 		
 		# Search through database and return list of tasks with employee ID
@@ -200,7 +202,7 @@ def main():
 		clear_screen()
 		
 		#Retrieve the employee id
-		id = screen_prompt('Employee ID: ', '', '\d+')
+		e_id = screen_prompt('Employee ID: ', '', '\d+')
 		
 		clear_screen()
 		#display the date task screen and retrieve the date.
@@ -224,7 +226,7 @@ def main():
 		except OperationalError:
 			pass
 		db.create_tables([Task], safe=True)
-		Task.create(task_id=t_id, emp_id=id, date=date, title=name, time=time, notes=notes)
+		Task.create(task_id=t_id, emp_id=e_id, date=date, title=name, time=time, notes=notes)
 		db.close()
 		clear_screen()
 		i = input('Task successfully logged. Press any key to return.\n')
