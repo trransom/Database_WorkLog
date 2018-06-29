@@ -25,7 +25,7 @@ class Task(Model):
 	'''
 	task_id = IntegerField(unique=True)
 	emp_id = IntegerField()
-	date = DateTimeField()
+	date = DateField()
 	title = CharField(max_length=255)
 	time = IntegerField()
 	notes = TextField()
@@ -126,7 +126,10 @@ def search_screen():
 		time1 = dt.strptime(inpt[0], '%m/%d/%Y')
 		time2 = dt.strptime(inpt[1], '%m/%d/%Y')
 		
-		test = Task.date >= time1 and Task.date <= time2
+		#test = Task.date >= time1 and Task.date <= time2
+		test = Task.date == time2
+		print(type(time2))
+		print(time2)
 		db_open(test)
 		
 	# Prompt for time search
@@ -143,7 +146,7 @@ def search_screen():
 		
 		# Search database for tasks where either the task name or notes
 		# match the input
-		test = (Task.title==inpt or Task.notes==inpt)
+		test = ((inpt in Task.title) or (inpt in Task.notes))
 		#test = Task.notes==inpt
 		db_open(test)
 		
