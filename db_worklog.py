@@ -78,7 +78,18 @@ def task_display(num1, total, list):
 		# Recursively calls task_display until the user breaks out of the menu.
 		task_display(number, total, list)
 		
-def 
+def db_open(boole):
+	try:
+		db.connect()
+	except OperationalError:
+		pass
+	task_list = Task.select().where(boole)
+	db.close()
+	try:
+		task_display(0, len(task_list), task_list)
+	except IndexError:
+		i = input('No results found. Press any key to return to the search menu.')
+		search_screen()
 	
 def search_screen():
 	'''
@@ -102,17 +113,8 @@ def search_screen():
 		inpt = screen_prompt("Enter the employee ID you would like to view:", '>', '\d*')
 		
 		# Search through database and return list of tasks with employee ID
-		try:
-			db.connect()
-		except OperationalError:
-			pass
-		task_list = Task.select().where(Task.emp_id==inpt)
-		db.close()
-		try:
-			task_display(0, len(task_list), task_list)
-		except IndexError:
-			i = input('No results found. Press any key to return to the search menu.')
-			search_screen()
+		test = Task.emp_id==inpt
+		db_open(test)
 	# Prompt for range of dates
 	elif options.lower()=='b':
 		clear_screen()
@@ -123,33 +125,17 @@ def search_screen():
 		inpt = inpt.split(', ')
 		time1 = dt.strptime(inpt[0], '%m/%d/%Y')
 		time2 = dt.strptime(inpt[1], '%m/%d/%Y')
-		try:
-			db.connect()
-		except OperationalError:
-			pass
-		task_list = Task.select().where(Task.date >= time1 and Task.date <= time2)
-		db.close()
-		try:
-			task_display(0, len(task_list), task_list)
-		except IndexError:
-			i = input('No results found. Press any key to return to the search menu.')
-			search_screen()
+		
+		test = Task.date >= time1 and Task.date <= time2
+		db_open(test)
+		
 	# Prompt for time search
 	elif options.lower()=='c':
 		clear_screen()
 		inpt = screen_prompt('Enter the amount of time:\n', '>', '\d*')
 		# Search database for tasks that match time input
-		try:
-			db.connect()
-		except OperationalError:
-			pass
-		task_list = Task.select().where(Task.time==inpt)
-		db.close()
-		try:
-			task_display(0, len(task_list), task_list)
-		except IndexError:
-			i = input('No results found. Press any key to return to the search menu.')
-			search_screen()
+		test = Task.time==inpt
+		db_open(test)
 			
 	elif options.lower()=='d':
 		clear_screen()
@@ -157,17 +143,9 @@ def search_screen():
 		
 		# Search database for tasks where either the task name or notes
 		# match the input
-		try:
-			db.connect()
-		except OperationalError:
-			pass
-		task_list = Task.select().where((Task.title or Task.notes)==inpt)
-		db.close()
-		try:
-			task_display(0, len(task_list), task_list)
-		except IndexError:
-			i = input('No results found. Press any key to return to the search menu.')
-			search_screen()
+		test = (Task.title==inpt or Task.notes==inpt)
+		#test = Task.notes==inpt
+		db_open(test)
 		
 	# Return to the main menu.
 	elif options.lower()=='e':
