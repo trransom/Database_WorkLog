@@ -10,13 +10,6 @@ from task_screen import Task_Screen
 
 
 db = SqliteDatabase('employees.db')
-
-#class Employee(Model): 
-#	emp_id = IntegerField(unique=True)
-#	first_name = CharField(max_length=255)
-#	last_name = CharField(max_length=255)
-#	class Meta:
-#		database = db
 	
 class Task(Model):
 	'''
