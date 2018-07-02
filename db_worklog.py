@@ -123,13 +123,10 @@ def search_screen():
 		
 		# Search database for tasks with dates between range of dates.
 		inpt = inpt.split(', ')
-		time1 = dt.strptime(inpt[0], '%m/%d/%Y')
-		time2 = dt.strptime(inpt[1], '%m/%d/%Y')
+		time1 = dt.strptime(inpt[0], '%m/%d/%Y').date()
+		time2 = dt.strptime(inpt[1], '%m/%d/%Y').date()
 		
-		#test = Task.date >= time1 and Task.date <= time2
-		test = Task.date == time2
-		print(type(time2))
-		print(time2)
+		test = (Task.date >= time1) & (Task.date <= time2)
 		db_open(test)
 		
 	# Prompt for time search
@@ -143,11 +140,7 @@ def search_screen():
 	elif options.lower()=='d':
 		clear_screen()
 		inpt = screen_prompt('Enter your search term:\n', '>', '.*')
-		
-		# Search database for tasks where either the task name or notes
-		# match the input
-		test = ((inpt in Task.title) or (inpt in Task.notes))
-		#test = Task.notes==inpt
+		test = Task.notes.contains(inpt) or Task.title.contains(inpt)
 		db_open(test)
 		
 	# Return to the main menu.
@@ -187,7 +180,7 @@ def main():
 		
 		clear_screen()
 		#display the date task screen and retrieve the date.
-		date = screen_prompt('Date of the task\nPlease use MM/DD/YYYY: ', '', '([0-1][0-9])\/([0-3][0-9])\/[0-9]{4}')
+		date = screen_prompt('Date of the task\nPlease use YYYY-MM-DD: ', '', '([0-9]{4})-([0-1][0-9])-([0-3][0-9])')
 		
 		clear_screen()
 		#Retrieve the title of the task
