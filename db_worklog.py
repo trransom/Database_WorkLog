@@ -79,6 +79,11 @@ def task_display(num1, total, list):
 		task_display(number, total, list)
 		
 def db_open(boole):
+	'''
+		Opens up the database and runs a query based
+		on the boolean passed as the argument. Calls
+		'task_display' to then display all matches.
+	'''
 	try:
 		db.connect()
 	except OperationalError:
@@ -137,6 +142,7 @@ def search_screen():
 		test = Task.time==inpt
 		db_open(test)
 			
+	# Prompt for search term
 	elif options.lower()=='d':
 		clear_screen()
 		inpt = screen_prompt('Enter your search term:\n', '>', '.*')
@@ -208,30 +214,7 @@ def main():
 			
 	elif inpt.lower()=='b':
 		search_screen()
-			
-#	elif inpt.lower()=='c':
-#		clear_screen()
-#		#Create employee id
-#		id = screen_prompt('Enter the new employee ID: ', '>', '\d+')
-#		
-#		clear_screen()
-#		#Create employee first name
-#		first = screen_prompt('Enter the employee\'s first name', '>', '\w+')
-#		
-#		clear_screen()
-#		#Create employee last name
-#		last = screen_prompt('Enter the employee\'s last name', '>', '\w+')
-#		
-#		# Enter the new employee into the employee database
-#		try:
-#			db.connect()
-#		except OperationalError:
-#			pass
-#		Employee.create(emp_id=id, first_name=first, last_name=last)
-#		db.close()
-#		clear_screen()
-#		i = input('New employee successfully logged. Press any key to return.\n')
-#		main()
+		
 	elif inpt.lower()=='c':
 		clear_screen()
 		print('Thanks for using the Work Log program!')
